@@ -11,15 +11,7 @@ class Square < Tetromino
     ]
   end
 
-  def left
-    up
-  end
-  
-  def down
-    up
-  end
-  
-  def right
-    up
-  end
+  alias :left :up
+  alias :down :up
+  alias :right :up
 end

@@ -10,12 +10,17 @@ require 'lib/block'
 require 'lib/tetromino'
 require 'lib/square'
 require 'lib/l_right'
+require 'lib/l_left'
+require 'lib/t'
+require 'lib/line'
+require 'lib/step_right'
+require 'lib/step_left'
 
 class Tetris < Gosu::Window
   
   def initialize
     super 640, 480, false
-    @item = LRight.new Coordinate.new(1, 1)
+    @item = StepLeft.new Coordinate.new(1, 1)
     @elapsed_milliseconds = 0
     @fall_frequency = 60
   end
@@ -45,5 +50,4 @@ class Tetris < Gosu::Window
   end
 end
 
-window = Tetris.new
-window.show
+Tetris.new.show
