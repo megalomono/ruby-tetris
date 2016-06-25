@@ -5,6 +5,7 @@ require 'gosu'
 # Include the current lib directory in the include path
 $: << Pathname.new(File.dirname(__FILE__)).realpath
 
+require 'lib/grid'
 require 'lib/coordinate'
 require 'lib/block'
 require 'lib/tetromino'
@@ -19,8 +20,9 @@ require 'lib/step_left'
 class Tetris < Gosu::Window
   
   def initialize
-    super 640, 480, false
-    @item = StepLeft.new Coordinate.new(1, 1)
+    super 10 * 25, 20 * 25, false
+    @grid = Grid.new 10, 20, 25
+    @item = LRight.new(@grid, Coordinate.new(0, 0))
     @elapsed_milliseconds = 0
     @fall_frequency = 60
   end

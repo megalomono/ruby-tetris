@@ -1,13 +1,12 @@
 class Block
 
-  attr_writer :position
-
-  def initialize(position)
+  def initialize(position, size)
     @block_image = Gosu::Image.new("media/block.png", { tileable: true })
     @position = position
+    @size = size
   end
   
   def render
-    @block_image.draw(@position.x_in_pixels, @position.y_in_pixels, 0)
+    @block_image.draw(@position.x * @size, @position.y * @size, 0)
   end
 end

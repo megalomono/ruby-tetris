@@ -1,9 +1,5 @@
 class StepLeft < Tetromino
 
-  def initialize(position)
-    super
-  end
-
   def up
     [
       [1, 1, 0],

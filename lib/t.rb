@@ -1,9 +1,5 @@
 class T < Tetromino
 
-  def initialize(position)
-    super
-  end
-
   def up
     [
       [1, 1, 1],

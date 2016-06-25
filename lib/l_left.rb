@@ -1,9 +1,5 @@
 class LLeft < Tetromino
 
-  def initialize(position)
-    super
-  end
-
   def up
     [
       [0, 1],

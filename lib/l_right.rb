@@ -1,9 +1,5 @@
 class LRight < Tetromino
 
-  def initialize(position)
-    super
-  end
-
   def up
     [
       [1, 0],

@@ -1,7 +1,5 @@
 class Coordinate
 
-  BLOCK_SIZE = 25
-  
   attr_reader :x, :y
   
   def initialize(x, y)
@@ -9,15 +7,23 @@ class Coordinate
     @y = y
   end
   
-  def x_in_pixels
-    @x * BLOCK_SIZE
+  def displace(x_offset, y_offset)
+    Coordinate.new @x + x_offset, @y + y_offset
   end
   
-  def y_in_pixels
-    @y * BLOCK_SIZE
+  def ==(another_coordinate)
+    @x == another_coordinate.x && @y == another_coordinate.y
   end
   
-  def displace(x, y)
-    Coordinate.new @x + x, @y + y
+  def eql?(another_coordinate)
+    self == another_coordinate
+  end
+  
+  def hash
+    [@x, @y].hash
+  end
+  
+  def to_s
+    "[#{@x},#{@y}]"
   end
 end

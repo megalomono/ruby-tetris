@@ -1,9 +1,5 @@
 class Line < Tetromino
 
-  def initialize(position)
-    super
-  end
-
   def up
     [
       [1],
