@@ -1,14 +1,20 @@
+require 'gosu'
+
 class Tetromino
 
   ORIENTATIONS = [:up, :right, :down, :left]
 
-  attr_reader :position
-  attr_reader :orientation
+  attr_reader :position, :orientation
   
   def initialize(grid, position, orientation = :up)
     @grid = grid
     @position = position
     @orientation = orientation
+    @fixed = false
+  end
+  
+  def fixed?
+    @fixed
   end
   
   def move_left
@@ -26,31 +32,36 @@ class Tetromino
   def rotate
     next_orientation_index = (ORIENTATIONS.index(@orientation) + 1) % 4
     next_orientation = ORIENTATIONS[next_orientation_index]
-    @orientation = next_orientation if @grid.can_move_to occupied_coordinates(@position, next_orientation)
+    @orientation = next_orientation if @grid.can_move_to_coordinates occupied_coordinates_for(@position, next_orientation)
   end
   
-  def occupied_coordinates(position = @position, orientation = @orientation)
-    @coordinates = []
-    self.send(orientation).each_with_index do |row, y|
-      row.each_with_index do |col, x|
-        @coordinates << position.displace(x, y) if col == 1
-      end
-    end
-    @coordinates
+  def occupied_coordinates
+    occupied_coordinates_for(@position, @orientation)
   end
   
   def render
-    occupied_coordinates.each { |c| Block.new(c, @grid.block_size).render }
+    occupied_coordinates_for(@position, @orientation).each { |c| Block.new(c, @grid.block_size, @color).render }
   end
   
   private
+
+    def occupied_coordinates_for(position, orientation)
+      coordinates = []
+      self.send(orientation).each_with_index do |row, y|
+        row.each_with_index do |col, x|
+          coordinates << position.displace(x, y) if col == 1
+        end
+      end
+      coordinates
+    end
   
     def displace(x_offset, y_offset)
       next_position = @position.displace x_offset, y_offset
-      if @grid.can_move_to occupied_coordinates(next_position)
+      if @grid.can_move_to_coordinates occupied_coordinates_for(next_position, @orientation)
         @position = next_position
-      else
-        @grid.occupy_coordinate occupied_coordinates
+      elsif y_offset > 0
+        @fixed = true
+        @grid.occupy_coordinates occupied_coordinates_for(@position, @orientation).map { |c| Block.new(c, @grid.block_size, @color) }
       end
     end
 end

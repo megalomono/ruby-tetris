@@ -6,26 +6,57 @@ class Grid
     @width = width
     @height = height
     @block_size = block_size
-    @occupied_coordinates = []
-    set_boundaries
+    @occupied_coordinates = empty_grid
+    @blocks = []
   end
   
   def occupy_coordinate(coordinate)
-    @occupied_coordinates << coordinate
+    @occupied_coordinates[coordinate.y][coordinate.x] = 1
   end
   
-  def can_move_to(coordinates)
-    return !@occupied_coordinates.include?(coordinates) if coordinates.is_a? Coordinate
-    return (@occupied_coordinates & coordinates).empty? if coordinates.is_a? Array
-    return false
+  def occupy_coordinates(blocks)
+    blocks.each { |b| occupy_coordinate b.position }
+    @blocks += blocks
+  end
+  
+  def can_move_to_coordinate(coordinate)
+    return false unless coordinate.x.between?(0, @width - 1)
+    return false unless coordinate.y < @height
+    return @occupied_coordinates[coordinate.y][coordinate.x] == 0
+  end
+  
+  def can_move_to_coordinates(coordinates)
+    return coordinates.all? { |c| can_move_to_coordinate c }
+  end
+  
+  def render
+    @blocks.each { |b| b.render }
   end
   
   private
   
-    def set_boundaries
-      @occupied_coordinates += (0..@height).map { |y| Coordinate.new -1, y }
-      @occupied_coordinates += (0..@height).map { |y| Coordinate.new @width, y }
-      @occupied_coordinates += (-1..@width).map { |x| Coordinate.new(x, @height) }
+    def empty_grid
+      [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ]
     end
-  
 end

@@ -1,6 +1,7 @@
 require 'test/unit'
 require_relative '../lib/grid'
 require_relative '../lib/coordinate'
+require_relative '../lib/block'
 require_relative '../lib/tetromino'
 require_relative '../lib/square'
 require_relative '../lib/l_right'
@@ -54,6 +55,17 @@ class TetrominoTest < Test::Unit::TestCase
     tetromino.rotate
     # Then
     assert_equal :up, tetromino.orientation    
+  end
+  
+  def test_tetromino_fixed
+    # Given
+    tetromino = LRight.new(@grid, Coordinate.new(0, 17))
+    assert_true @grid.can_move_to_coordinates tetromino.occupied_coordinates
+    # When
+    tetromino.move_down
+    # Then
+    assert_true tetromino.fixed?
+    assert_false @grid.can_move_to_coordinates tetromino.occupied_coordinates
   end
   
 end

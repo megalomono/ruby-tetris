@@ -24,23 +24,27 @@ class Tetris < Gosu::Window
     @grid = Grid.new 10, 20, 25
     @item = LRight.new(@grid, Coordinate.new(0, 0))
     @elapsed_milliseconds = 0
-    @fall_frequency = 60
+    @fall_frequency = 5
   end
 
   def update
-    case @pressed_button
-      when :left then @item.move_left
-      when :right then @item.move_right
-      when :down then @item.move_down
-      when :up then @item.rotate
+    @item = Square.new(@grid, Coordinate.new(0, 0)) if @item.fixed?
+    if @elapsed_milliseconds % 3 == 0
+      case @pressed_button
+        when :left then @item.move_left
+        when :right then @item.move_right
+        when :down then @item.move_down
+        when :up then @item.rotate
+      end
+      @pressed_button = nil
     end
-    @pressed_button = nil
-    #@item.move_down if @elapsed_milliseconds % @fall_frequency == 0
-		@elapsed_milliseconds += 1
+    @item.move_down if @elapsed_milliseconds % @fall_frequency == 0
+    @elapsed_milliseconds += 1
   end
   
   def draw
     @item.render
+    @grid.render
   end
   
   def button_down(id)
