@@ -21,12 +21,13 @@ class Tetris < Gosu::Window
   
   def initialize
     super 10 * 25, 20 * 25, false
-    @grid = Grid.new 10, 20, 25
+    @grid = Grid.new
     @elapsed_milliseconds = 0
     @fall_frequency = 10
   end
 
   def update
+    return if @paused
     @item = Tetromino.random(@grid, Coordinate.new(4, 0)) if @item.nil? || @item.fixed?
     case @pressed_button
       when :left then @item.move_left
@@ -50,6 +51,7 @@ class Tetris < Gosu::Window
     @pressed_button = :right if id == Gosu::KbRight
     @pressed_button = :down if id == Gosu::KbDown
     @pressed_button = :up if id == Gosu::KbUp
+    @paused = !@paused if id == Gosu::KbSpace
   end
 end
 

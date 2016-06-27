@@ -1,11 +1,12 @@
 class Grid
 
-  attr_reader :width, :height, :block_size
+  WIDTH = 10
+  HEIGHT = 20
+
+  attr_accessor :block_size
   
-  def initialize(width, height, block_size)
-    @width = width
-    @height = height
-    @block_size = block_size
+  def initialize
+    @block_size = 25
     @occupied_coordinates = empty_grid
     @blocks = []
   end
@@ -16,13 +17,13 @@ class Grid
   
   def occupy_coordinates(blocks)
     blocks.each { |b| occupy_coordinate b.position }
-    dismiss_completed_lines
     @blocks += blocks
+    dismiss_completed_lines
   end
   
   def can_move_to_coordinate(coordinate)
-    return false unless coordinate.x.between?(0, @width - 1)
-    return false unless coordinate.y < @height
+    return false unless coordinate.x.between?(0, WIDTH - 1)
+    return false unless coordinate.y < HEIGHT
     return @occupied_coordinates[coordinate.y][coordinate.x] == 0
   end
   
@@ -62,6 +63,13 @@ class Grid
     end
     
     def dismiss_completed_lines
-      #TODO
+      @occupied_coordinates.each_with_index do |row, y|  
+        if row.all? { |x| x == 1 }
+          @occupied_coordinates.delete_at y
+          @occupied_coordinates.insert 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          @blocks.delete_if { |b| b.position.y == y }
+          @blocks.each { |b| b.position = b.position.displace(0, 1) if b.position.y < y }
+        end
+      end
     end
 end

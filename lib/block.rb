@@ -2,7 +2,7 @@ require 'gosu'
 
 class Block
 
-  attr_reader :position
+  attr_accessor :position
 
   def initialize(position, size, color)
     @block_image = Gosu::Image.new("media/block.png", { tileable: true })

@@ -9,7 +9,7 @@ require_relative '../lib/l_right'
 class TetrominoTest < Test::Unit::TestCase
   
   def setup
-    @grid = Grid.new 10, 20, 25
+    @grid = Grid.new
   end
   
   def test_move_right

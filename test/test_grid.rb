@@ -5,7 +5,7 @@ require_relative '../lib/coordinate'
 class GridTest < Test::Unit::TestCase
   
   def setup
-    @grid = Grid.new 10, 20, 25
+    @grid = Grid.new
   end
   
   def test_can_move_to_one_coordinate
@@ -23,8 +23,6 @@ class GridTest < Test::Unit::TestCase
   end
 
   def test_can_move_outside_left_boundary
-    # Given
-    @grid = Grid.new 10, 20, 25
     # Then
     assert_false @grid.can_move_to_coordinates [Coordinate.new(-1, 0), Coordinate.new(-1, 1), Coordinate.new(0, 0)]
   end

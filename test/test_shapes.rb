@@ -13,7 +13,7 @@ require_relative '../lib/step_left'
 class ShapesTest < Test::Unit::TestCase
   
   def setup
-    @grid = Grid.new 10, 20, 25
+    @grid = Grid.new
   end
   
   def test_square_occupied_coordinates
