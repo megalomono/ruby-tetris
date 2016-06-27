@@ -16,6 +16,7 @@ class Grid
   
   def occupy_coordinates(blocks)
     blocks.each { |b| occupy_coordinate b.position }
+    dismiss_completed_lines
     @blocks += blocks
   end
   
@@ -58,5 +59,9 @@ class Grid
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       ]
+    end
+    
+    def dismiss_completed_lines
+      #TODO
     end
 end

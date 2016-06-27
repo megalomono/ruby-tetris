@@ -6,6 +6,14 @@ class Tetromino
 
   attr_reader :position, :orientation
   
+  def self.random(grid, position)
+		shapes = [ T, LLeft, LRight, Line, Square, StepLeft, StepRight ]
+		t = Time.now.to_f / (Time.now.to_f % Time.now.to_i)
+  	random_seed = t * 1103515245 + 12345;
+  	srand((random_seed / 65536) % 32768);
+		shapes[rand(shapes.length)].new(grid, position)
+  end
+  
   def initialize(grid, position, orientation = :up)
     @grid = grid
     @position = position

@@ -22,22 +22,19 @@ class Tetris < Gosu::Window
   def initialize
     super 10 * 25, 20 * 25, false
     @grid = Grid.new 10, 20, 25
-    @item = LRight.new(@grid, Coordinate.new(0, 0))
     @elapsed_milliseconds = 0
-    @fall_frequency = 5
+    @fall_frequency = 10
   end
 
   def update
-    @item = Square.new(@grid, Coordinate.new(0, 0)) if @item.fixed?
-    if @elapsed_milliseconds % 3 == 0
-      case @pressed_button
-        when :left then @item.move_left
-        when :right then @item.move_right
-        when :down then @item.move_down
-        when :up then @item.rotate
-      end
-      @pressed_button = nil
+    @item = Tetromino.random(@grid, Coordinate.new(4, 0)) if @item.nil? || @item.fixed?
+    case @pressed_button
+      when :left then @item.move_left
+      when :right then @item.move_right
+      when :down then @item.move_down
+      when :up then @item.rotate
     end
+    @pressed_button = nil
     @item.move_down if @elapsed_milliseconds % @fall_frequency == 0
     @elapsed_milliseconds += 1
   end
