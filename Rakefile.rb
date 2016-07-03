@@ -2,7 +2,7 @@ require 'rake/testtask'
 
 task :default => [:test]
 
-task :tetris do |t|
+task :start do |t|
   ruby 'tetris.rb'
 end
 

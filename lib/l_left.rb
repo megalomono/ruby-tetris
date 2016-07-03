@@ -1,10 +1,7 @@
 class LLeft < Tetromino
 
   def initialize(grid, position, orientation = :up)
-		@color = Gosu::Color.new(0xff000000)
-    @color.red = 0
-    @color.green = 255
-    @color.blue = 255
+		@color = Gosu::Color::CYAN
 		super
 	end
 

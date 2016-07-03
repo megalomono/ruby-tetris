@@ -7,11 +7,11 @@ class Tetromino
   attr_reader :position, :orientation
   
   def self.random(grid, position)
-		shapes = [ T, LLeft, LRight, Line, Square, StepLeft, StepRight ]
-		t = Time.now.to_f / (Time.now.to_f % Time.now.to_i)
-  	random_seed = t * 1103515245 + 12345;
-  	srand((random_seed / 65536) % 32768);
-		shapes[rand(shapes.length)].new(grid, position)
+    shapes = [ T, LLeft, LRight, Line, Square, StepLeft, StepRight ]
+    t = Time.now.to_f / (Time.now.to_f % Time.now.to_i)
+    random_seed = t * 1103515245 + 12345;
+    srand((random_seed / 65536) % 32768);
+    shapes[rand(shapes.length)].new(grid, position)
   end
   
   def initialize(grid, position, orientation = :up)
@@ -40,7 +40,7 @@ class Tetromino
   def rotate
     next_orientation_index = (ORIENTATIONS.index(@orientation) + 1) % 4
     next_orientation = ORIENTATIONS[next_orientation_index]
-    @orientation = next_orientation if @grid.can_move_to_coordinates occupied_coordinates_for(@position, next_orientation)
+    @orientation = next_orientation if @grid.can_move_to? occupied_coordinates_for(@position, next_orientation)
   end
   
   def occupied_coordinates
@@ -65,11 +65,11 @@ class Tetromino
   
     def displace(x_offset, y_offset)
       next_position = @position.displace x_offset, y_offset
-      if @grid.can_move_to_coordinates occupied_coordinates_for(next_position, @orientation)
+      if @grid.can_move_to? occupied_coordinates_for(next_position, @orientation)
         @position = next_position
       elsif y_offset > 0
         @fixed = true
-        @grid.occupy_coordinates occupied_coordinates_for(@position, @orientation).map { |c| Block.new(c, @grid.block_size, @color) }
+        @grid.add occupied_coordinates_for(@position, @orientation).map { |c| Block.new(c, @grid.block_size, @color) }
       end
     end
 end

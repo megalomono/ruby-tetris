@@ -21,7 +21,7 @@ class Tetris < Gosu::Window
   
   def initialize
     super 10 * 25, 20 * 25, false
-    @grid = Grid.new
+    @grid = Grid.new_empty_grid 10, 20
     @elapsed_milliseconds = 0
     @fall_frequency = 10
   end

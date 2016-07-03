@@ -9,7 +9,7 @@ require_relative '../lib/l_right'
 class TetrominoTest < Test::Unit::TestCase
   
   def setup
-    @grid = Grid.new
+    @grid = Grid.new_empty_grid 10, 20
   end
   
   def test_move_right
@@ -60,12 +60,12 @@ class TetrominoTest < Test::Unit::TestCase
   def test_tetromino_fixed
     # Given
     tetromino = LRight.new(@grid, Coordinate.new(0, 17))
-    assert_true @grid.can_move_to_coordinates tetromino.occupied_coordinates
+    assert_true @grid.can_move_to? tetromino.occupied_coordinates
     # When
     tetromino.move_down
     # Then
     assert_true tetromino.fixed?
-    assert_false @grid.can_move_to_coordinates tetromino.occupied_coordinates
+    assert_false @grid.can_move_to? tetromino.occupied_coordinates
   end
   
 end
