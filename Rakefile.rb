@@ -1,7 +1,10 @@
 require 'rake/testtask'
 
-task :default => [:test]
+task :default do
+  system "rake --tasks"
+end
 
+desc "Start the game"
 task :start do |t|
   ruby 'tetris.rb'
 end
