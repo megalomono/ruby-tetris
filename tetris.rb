@@ -27,32 +27,85 @@ class Tetris < Gosu::Window
   end
 
   def update
-    return if @paused
-    @item = Tetromino.random(@grid, Coordinate.new(4, 0)) if @item.nil? || @item.fixed?
-    case @pressed_button
-      when :left then @item.move_left
-      when :right then @item.move_right
-      when :down then @item.move_down
-      when :up then @item.rotate
+    if @grid.complete?
+      show_game_over_message
+      restart if @pressed_button == :enter
+      return
     end
-    @pressed_button = nil
-    @item.move_down if @elapsed_milliseconds % @fall_frequency == 0
-    @elapsed_milliseconds += 1
+    
+    if @paused
+      show_paused_game_message
+      return
+    end
+    
+    generate_tetromino if no_active_tetromino
+    handle_player_input
+    execute_machine_actions    
+    reset_input_and_messages
   end
   
   def draw
     @item.render
     @grid.render
+    @message.draw_rot(125, 250, 1, 0) unless @message.nil?
+    @help.draw_rot(125, 275, 1, 0) unless @help.nil?
   end
   
   def button_down(id)
     close if id == Gosu::KbEscape
+    @pressed_button = :enter if id == Gosu::KbEnter || id == Gosu::KbReturn
     @pressed_button = :left if id == Gosu::KbLeft
     @pressed_button = :right if id == Gosu::KbRight
     @pressed_button = :down if id == Gosu::KbDown
     @pressed_button = :up if id == Gosu::KbUp
     @paused = !@paused if id == Gosu::KbSpace
   end
+  
+  private
+  
+    def show_game_over_message
+      @message = Gosu::Image.from_text("GAME OVER", 25)
+      @help = Gosu::Image.from_text("Press enter to restart", 20)
+    end
+  
+    def show_paused_game_message
+      @message = Gosu::Image.from_text("Paused", 25)
+      @help = Gosu::Image.from_text("Press space to resume", 20)
+    end
+  
+    def no_active_tetromino
+      @item.nil? || @item.fixed?
+    end
+  
+    def generate_tetromino
+      @item = Tetromino.random(@grid, Coordinate.new(4, 0))
+    end
+  
+    def handle_player_input
+      case @pressed_button
+        when :left then @item.move_left
+        when :right then @item.move_right
+        when :down then @item.move_down
+        when :up then @item.rotate
+      end
+    end
+    
+    def execute_machine_actions
+      @item.move_down if @elapsed_milliseconds % @fall_frequency == 0
+      @elapsed_milliseconds += 1
+    end
+  
+    def reset_input_and_messages
+      @message = nil
+      @help = nil
+      @pressed_button = nil
+    end
+  
+    def restart
+      @grid = Grid.new_empty_grid 10, 20
+      generate_tetromino
+      @elapsed_milliseconds = 0
+    end
 end
 
 Tetris.new.show

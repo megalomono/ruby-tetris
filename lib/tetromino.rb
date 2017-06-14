@@ -26,21 +26,35 @@ class Tetromino
   end
   
   def move_left
-    displace -1, 0
+    next_position = @position.displace -1, 0
+    if @grid.can_move_to? occupied_coordinates_for(next_position, @orientation)
+      @position = next_position
+    end
   end
   
   def move_right
-    displace 1, 0
+    next_position = @position.displace 1, 0
+    if @grid.can_move_to? occupied_coordinates_for(next_position, @orientation)
+      @position = next_position
+    end
   end
 
   def move_down
-    displace 0, 1
+    next_position = @position.displace 0, 1
+    if @grid.can_move_to? occupied_coordinates_for(next_position, @orientation)
+      @position = next_position
+    else
+      @fixed = true
+      @grid.add occupied_coordinates_for(@position, @orientation).map { |c| Block.new(c, @grid.block_size, @color) }
+    end
   end
   
   def rotate
     next_orientation_index = (ORIENTATIONS.index(@orientation) + 1) % 4
     next_orientation = ORIENTATIONS[next_orientation_index]
-    @orientation = next_orientation if @grid.can_move_to? occupied_coordinates_for(@position, next_orientation)
+    if @grid.can_move_to? occupied_coordinates_for(@position, next_orientation)
+      @orientation = next_orientation
+    end
   end
   
   def occupied_coordinates
@@ -48,7 +62,7 @@ class Tetromino
   end
   
   def render
-    occupied_coordinates_for(@position, @orientation).each { |c| Block.new(c, @grid.block_size, @color).render }
+    occupied_coordinates.each { |c| Block.new(c, @grid.block_size, @color).render }
   end
   
   private
@@ -61,15 +75,5 @@ class Tetromino
         end
       end
       coordinates
-    end
-  
-    def displace(x_offset, y_offset)
-      next_position = @position.displace x_offset, y_offset
-      if @grid.can_move_to? occupied_coordinates_for(next_position, @orientation)
-        @position = next_position
-      elsif y_offset > 0
-        @fixed = true
-        @grid.add occupied_coordinates_for(@position, @orientation).map { |c| Block.new(c, @grid.block_size, @color) }
-      end
     end
 end

@@ -42,4 +42,18 @@ class GridTest < Test::Unit::TestCase
     assert_true grid.can_move_to? coordinates_to_test
   end
   
+  def test_grid_not_complete
+    # Given
+    grid = Grid.new [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 1, 1, 1, 0, 0, 0]]
+    # Then
+    assert_false grid.complete?
+  end
+  
+  def test_grid_complete
+    # Given
+    grid = Grid.new [[0, 0, 0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 1, 1, 0, 0, 0, 0]]
+    # Then
+    assert_true grid.complete?
+  end
+  
 end

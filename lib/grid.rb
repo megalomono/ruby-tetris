@@ -25,6 +25,10 @@ class Grid
     discard_completed_lines
   end
   
+  def complete?
+    @positions[0].any? { |x| x == 1 }
+  end
+  
   def render
     @blocks.each { |b| b.render }
   end
